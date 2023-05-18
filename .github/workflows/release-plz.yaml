@@ -1,0 +1,30 @@
+name: Release-plz
+
+permissions:
+  pull-requests: write
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  release-plz:
+    name: Release-plz
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT }}
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Run release-plz release-pr
+        uses: MarcoIeni/release-plz-action@main
+        with:
+          command: release-pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
